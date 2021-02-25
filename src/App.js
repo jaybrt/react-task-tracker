@@ -1,8 +1,11 @@
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
 import { useState } from 'react'
 
 const App = () => {
+
+  const [showAddTask, setShowAddTask] = useState(false)
 
   const [tasks, setTasks] = useState([
     {
@@ -25,6 +28,19 @@ const App = () => {
     }
   ])
 
+  //Toggle task adding menu
+  const toggleForm = () => {
+    setShowAddTask(!showAddTask)
+  }
+
+  //Add task2
+  const addTask = (task) => {
+    const id = tasks.length + 1
+    const newTask = {id, ...task}
+
+    setTasks([...tasks, newTask])
+    }
+
   //Delete Tasks
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id))
@@ -37,7 +53,8 @@ const App = () => {
 
   return (
     <div className="container">
-     <Header />
+     <Header onClick={toggleForm} formOpen={showAddTask}/>
+     {showAddTask && <AddTask onAdd={addTask}/>}
      {tasks.length > 0 ? ( <Tasks tasks={tasks} onDelete={deleteTask}
       onToggle={toggleReminder}/>) : 'You Have Completed Everything'}
     </div>
